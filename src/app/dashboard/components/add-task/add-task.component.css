@@ -1,0 +1,13 @@
+.icon-enter:hover{
+  cursor: pointer;
+}
+.icon-enter{
+  color:#e33814
+}
+.scrollable-skills {
+  max-height: 200px; /* Ajusta la altura máxima según tus necesidades */
+  max-width: 400px; /* Ajusta la altura máxima según tus necesidades */
+  overflow-y: auto;  /* Habilita el scroll vertical */
+  border: 1px solid #ccc; /* Opcional: para visualizar el contenedor */
+  padding: 10px; /* Opcional: agrega algo de padding */
+}

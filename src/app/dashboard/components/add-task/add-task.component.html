@@ -1,0 +1,97 @@
+<!-- Componente A (con el modal) -->
+<div class="modal fade" id="modalddTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Gestión de Tareas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="container mt-4">
+          <!-- Título del formulario -->
+
+          <!-- Formulario Reactivo -->
+          <form [formGroup]="tareaForm" (ngSubmit)="submitForm()">
+
+            <!-- Campo para el título de la tarea -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Título de la Tarea</label>
+              <input id="title" type="text" formControlName="title" class="form-control" placeholder="Título de la tarea">
+              <div *ngIf="tareaForm.controls['title'].invalid && tareaForm.controls['title'].touched" class="text-danger">
+                El título es obligatorio y debe tener al menos 3 caracteres.
+              </div>
+            </div>
+
+            <!-- Sección para las personas -->
+            <div formArrayName="people">
+              <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i" class="mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Persona {{ i + 1 }}</h5>
+                      <div class="row">
+
+                    <!-- Nombre Completo -->
+                    <div class="col-4 mb-3">
+                      <label for="fullName" class="form-label">Nombre Completo</label>
+                      <input id="fullName" type="text" formControlName="fullName" class="form-control" placeholder="Nombre Completo">
+                      <div *ngIf="person.get('fullName')?.invalid && person.get('fullName')?.touched" class="text-danger">
+                        El nombre completo es obligatorio y debe tener al menos 5 caracteres.
+                      </div>
+                    </div>
+
+                    <!-- Edad -->
+                    <div class="col-2 mb-3">
+                      <label for="age" class="form-label">Edad</label>
+                      <input id="age" type="number" formControlName="age" class="form-control" placeholder="Edad">
+                      <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="text-danger">
+                        La persona debe ser mayor de 18 años.
+                      </div>
+                    </div>
+
+                    <!-- Sección de Habilidades -->
+                    <div class="col-3" formArrayName="skills">
+                      <div class="scrollable-skills">
+                      <div  *ngFor="let skill of getSkills(i).controls; let j = index" [formGroupName]="j" class="mb-2">
+                        <label for="skillName" class="form-label">Habilidad {{ j + 1 }}</label>
+                        <div class="d-flex justify-content-beetwen  ">
+
+                          <input id="skillName" type="text" formControlName="skillName" class="form-control" placeholder="Habilidad">
+                          <div class="icon-enter " (click)="removeSkill(i, j)">
+                            <i class="ms-3 mb-2 pt-3 fas fa-solid fa-trash"></i>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-secondary mt-3" (click)="addSkill(i)">Añadir Habilidad</button>
+                    </div>
+
+                  <!-- Botón para eliminar persona -->
+
+                  <div class="icon-enter col-md-2 mt-4 " (click)="removePerson(i)">
+                    Eliminar
+                       </div>
+
+                  </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Botón para añadir nueva persona -->
+              <button type="button" class="btn btn-outline-primary mb-2" (click)="addPerson()">Añadir Persona</button>
+            </div>
+
+            <!-- Botón para enviar el formulario -->
+
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success " (click)="submitForm()"  [disabled]="tareaForm.invalid">Guardar Tarea</button>          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
