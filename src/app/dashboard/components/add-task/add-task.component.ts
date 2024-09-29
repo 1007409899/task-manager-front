@@ -5,6 +5,7 @@ import { ModalService } from '../../services/modal.service';
 import { Modal } from 'bootstrap';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Person } from '../../interfaces/task-interface';
+import { CusstomValidatorService } from '../../services/custom-validator.service';
 
 @Component({
   selector: 'app-add-task',
@@ -18,9 +19,11 @@ import { Person } from '../../interfaces/task-interface';
 export class AddTaskComponent implements OnInit {
 
   tareaForm!: FormGroup;
-  constructor(private modalService: ModalService, private fb: FormBuilder, private taskStateService:TaskStateService ) {}
+  constructor(private modalService: ModalService, private fb: FormBuilder, private taskStateService: TaskStateService, private customValidatorService: CusstomValidatorService) { }
 
   ngOnInit(): void {
+
+
     const modalElement = document.getElementById('modalddTask');
     if (modalElement) {
       this.modalService.setModal(new Modal(modalElement)); //
@@ -29,18 +32,26 @@ export class AddTaskComponent implements OnInit {
     this.tareaForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       people: this.fb.array([this.createPersonFormGroup()])
+
+
     });
+    this.modalService.getDataTask.subscribe((res: any) => {
+      this.tareaForm.patchValue(res);
+
+    })
+
+
+    this.tareaForm.valueChanges.subscribe(() => {
+      console.log(this.tareaForm)
+    })
   }
-
-
-
-
-  // Crea un grupo de formulario para cada persona
   createPersonFormGroup(): FormGroup {
     return this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(5)]],
       age: ['', [Validators.required, Validators.min(18)]],
       skills: this.fb.array([this.createSkillFormGroup()])
+    }, {
+      validators: [this.customValidatorService.uniqueControlNameValidator('fullName')] // Aquí llamas la función
     });
   }
 
@@ -51,8 +62,8 @@ export class AddTaskComponent implements OnInit {
     });
   }
 
-   // Obtener el array de personas
-   get people(): FormArray {
+  // Obtener el array de personas
+  get people(): FormArray {
     return this.tareaForm.get('people') as FormArray;
   }
 
@@ -83,7 +94,7 @@ export class AddTaskComponent implements OnInit {
 
   // Método para enviar el formulario
   submitForm(): void {
-    if(this.tareaForm.invalid){
+    if (this.tareaForm.invalid) {
       return this.tareaForm.markAllAsTouched();
     }
     const formValue = this.tareaForm.value;

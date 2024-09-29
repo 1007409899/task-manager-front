@@ -1,1 +1,35 @@
-<p>details-task works!</p>,
+<div class="modal fade" id="modalDetailsTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Gestión de Tareas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+
+<div class="container mt-4">
+  <!-- Detalles de la tarea -->
+  <div class="card">
+    <div class="card-header">
+      <h3>{{ task.title }}</h3>
+    </div>
+    <div class="card-body">
+
+      <p><strong>Estado:</strong> {{ task.completed ? 'Completada' : 'Pendiente' }}</p>
+    </div>
+  </div>
+
+  <!-- Listado de personas asociadas a la tarea -->
+  <div class="mt-4">
+    <h4>Personas asignadas</h4>
+    <ul class="list-group">
+      <li *ngFor="let person of people$ | async" class="list-group-item d-flex justify-content-between align-items-center">
+        {{ person.fullName }}
+        <span class="badge bg-primary rounded-pill">{{ person.skills.length }} habilidades</span>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+</div>
